@@ -1,6 +1,7 @@
 import React , {Component} from "react";
-import {View, Text, FlatList,List} from "react-native";
-//import {List, ListItem} from "react-native-elements";
+import {View, Text, FlatList, ActivityIndicator , Image} from "react-native";
+import {List, ListItem} from "react-native-elements";
+
 
 
 export default class FlatListDemo extends Component{
@@ -10,52 +11,65 @@ export default class FlatListDemo extends Component{
     super(props);
 
     this.state={
-      loading:false,
-      data:[],
-      page:1,
-      seed:1,
-      error: null,
-      refreshing:false
+      isLoading: true,
+      data:null,
+      
     };
   }
 
-  componentDidmount(){
-    this.makeRemoteRequest();
-  }
-  makeRemoteRequest=()=>{
-    const {page,seed}=this.state;
-    const url= "https://randomuser.me/api/?seed=${seed}&page=${page}&results=20"
-    this.setState({loading:true});
-    fetch(url)
-      .then(res => res.json())
-      .then(res => {
-        this.sstState({
-          data: page===1 ? res.results :[...this.state.data, ...res.results],
-          error:res.error || null,
-          loading:false,
-          refreshing: false
-        });
+  componentDidMount(){
+    uri1='https://api.themoviedb.org/3/discover/movie?api_key=c2a40f2fd508d0f8da08aaa40bae2440&language=en-US'
+    return fetch (uri1)
+      .then((response)=>response.json())
+      .then((responseJson)=>{
+        this.setState({
+          isLoading:false,
+          data: responseJson.results
+        })
       })
-      .catch(error =>{
-        this.setState({error, loading:false});
+  
+      .catch((error)=>{
+        console.log(error)
       });
-  }
+    }
+
+
+  
+
   render(){
-    return(
-      <List>
+    
+    if(this.state.isLoading){
+      return(
+        <View>
+          <ActivityIndicator/>
+        </View>
+      )
+    }
+
+    else { return(
+      <View >
+      
       <FlatList
-      data={this.state.data}
-      renderItem={({item})=>(
-        <ListItem
-          roundAvatar
-          title={`${item.name.first} ${item.name.last}`}
-          subtitle={item.email}
-          avatar={{uri: item.picture.thumbnail }}
+        
+        data = {this.state.data}
+        renderItem={({item}) => 
+        <Text>{item.original_title}
+        <Image
+        style={{width: 100, height: 100}}
+        source={{uri: 'http://image.tmdb.org/t/p/w185' + item.poster_path}}
+       
         />
-      )}
+      </Text>
+
+      }
+      
       />
-      </List>
-    )
+    
+  
+      <Text>Gong Yoo</Text>
+      
+      </View>
+    )}
   }
 }
 
