@@ -1,5 +1,5 @@
 import React , {Component} from "react";
-import {View, Text, FlatList, ActivityIndicator , Image} from "react-native";
+import {View, Text, FlatList, ActivityIndicator , Image, StyleSheet, TouchableOpacity } from "react-native";
 import {List, ListItem} from "react-native-elements";
 
 
@@ -41,26 +41,48 @@ export default class FlatListDemo extends Component{
     if(this.state.isLoading){
       return(
         <View>
-          <ActivityIndicator/>
+          <ActivityIndicator style={{paddingTop:250}}/>
         </View>
       )
     }
 
     else { return(
-      <View >
-      
-      <FlatList
-        
+      <View style={{backgroundColor:'#2e0e2f'}} >
+
+    
+      <FlatList 
+
         data = {this.state.data}
         renderItem={({item}) => 
-        <Text>{item.original_title}
-        <Image
-        style={{width: 100, height: 100}}
-        source={{uri: 'http://image.tmdb.org/t/p/w185' + item.poster_path}}
-       
-        />
-      </Text>
 
+       <TouchableOpacity onPress={()=> alert('SOON')}>
+      <View style= {styles.container}>
+      
+        
+        <Image 
+        
+        style={styles.image}
+        
+        source={{uri: 'http://image.tmdb.org/t/p/w185' + item.poster_path}}
+        >
+    
+        </Image>
+        
+        <View style={{paddingRight:140}}>
+        <Text style={styles.title}>
+             {item.original_title}
+        </Text>
+        <Text style={styles.subtitle}>
+             {item.overview}
+        </Text>
+        
+        </View>
+
+        
+        
+      </View>
+      </TouchableOpacity>
+      
       }
       
       />
@@ -73,3 +95,44 @@ export default class FlatListDemo extends Component{
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 4,
+    borderWidth: 0.25,
+    borderColor: '#FFFFF0',
+    flex:1,
+    flexDirection: 'row',
+    backgroundColor:'#2e0e2f',
+    padding:5
+  },
+  image:{
+    resizeMode:'stretch',
+    width: 150, 
+    height: 120,
+    borderRadius: 30,
+
+    
+
+  },
+  title: {
+    fontSize: 15,
+    color:'#FFFFF0',
+    fontWeight: 'bold',
+    textAlignVertical:'auto',
+    flex:1,
+    flexDirection: 'row',
+    paddingHorizontal:5,
+
+  },
+  subtitle:{
+    fontSize: 10,
+    color:'#FFFFF0',
+    textAlignVertical:'auto',
+    flex:1,
+    flexDirection: 'row',
+    paddingHorizontal:5
+  },  
+  activeTitle: {
+    color: 'red',
+  },
+});
